@@ -15,9 +15,8 @@ class LandingScreen extends StatelessWidget {
       body: Stack(
         children: [
           Positioned(
-            top: MediaQuery.of(context).size.height *
-                -0.05, // Adjust top position as needed
-            left: 0, // Keep left position at 0
+            top: MediaQuery.of(context).size.height * -0.05,
+            left: 0,
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.55,
@@ -41,7 +40,7 @@ class LandingScreen extends StatelessWidget {
                     style: TextStyle(
                         fontFamily: 'AvenirNext',
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w900,
                         color: lwhite),
                   ),
                   const Text(
@@ -49,7 +48,7 @@ class LandingScreen extends StatelessWidget {
                     style: TextStyle(
                         fontFamily: 'AvenirNext',
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w900,
                         color: lwhite),
                   ),
                   const SizedBox(
@@ -69,7 +68,7 @@ class LandingScreen extends StatelessWidget {
                           fontFamily: 'AvenirNext',
                           fontSize: 16,
                           color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w900,
                         ),
                       ),
                     ),
@@ -103,7 +102,7 @@ class LandingScreen extends StatelessWidget {
                               fontFamily: 'AvenirNext',
                               fontSize: 16,
                               color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w900,
                             ),
                           ),
                         ],
@@ -139,7 +138,7 @@ class LandingScreen extends StatelessWidget {
                               fontFamily: 'AvenirNext',
                               fontSize: 16,
                               color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w900,
                             ),
                           ),
                         ],
@@ -175,7 +174,7 @@ class LandingScreen extends StatelessWidget {
                               fontFamily: 'AvenirNext',
                               fontSize: 16,
                               color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w900,
                             ),
                           ),
                         ],
@@ -191,7 +190,7 @@ class LandingScreen extends StatelessWidget {
                         fontFamily: 'AvenirNext',
                         fontSize: 16,
                         color: lwhite,
-                        fontWeight: FontWeight.bold),
+                        fontWeight: FontWeight.w900),
                   )
                 ],
               ),

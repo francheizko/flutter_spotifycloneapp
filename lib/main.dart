@@ -1,6 +1,13 @@
 import "package:flutter/material.dart";
+import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/choose_artist.dart";
+import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/choose_podcast.dart";
 
 import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/landing_screen.dart";
+import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/signup_1.dart";
+import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/signup_2.dart";
+import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/signup_3.dart";
+import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/signup_4.dart";
+import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/signup_5.dart";
 
 void main() {
   runApp(
@@ -24,7 +31,7 @@ class _MyWidgetState extends State<SpotifyCloneApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Color(0xFFFCFCFC),
-        body: LandingScreen(),
+        body: ChoosePodcastScreen(),
       ),
     );
   }

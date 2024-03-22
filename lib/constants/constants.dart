@@ -8,5 +8,6 @@ const llightergray = Color(0xFFEDEDED);
 const lgray = Color(0xFF9B9B9B);
 const lyellow = Color(0xFFE8BE13);
 const lgreen = Color(0xFF1ED760);
-const llgray = Color(0xFFA1A1A1);
+const llgray = Color(0xFF777777);
+const lldarkergray = Color(0xFF535353);
 const backgroundc = Color(0xFF121212);
