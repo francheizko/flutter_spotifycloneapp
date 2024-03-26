@@ -97,18 +97,25 @@ class ChoosePodcastScreenState extends State<ChoosePodcastScreen> {
                       child: Column(
                         children: [
                           Container(
-                              width: MediaQuery.of(context).size.width * 0.27,
-                              height: MediaQuery.of(context).size.height * 0.12,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                    6,
-                                  ),
-                                  color: Colors.white)),
+                            width: MediaQuery.of(context).size.width * 0.27,
+                            height: MediaQuery.of(context).size.height * 0.12,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              color: Colors.white,
+                              image: DecorationImage(
+                                image: AssetImage(podcast[index].imagePath),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.005,
+                          ),
                           Text(
                             podcast[index].name,
                             style: const TextStyle(
                               fontFamily: 'AvenirNext',
-                              fontSize: 12,
+                              fontSize: 14,
                               fontWeight: FontWeight.w900,
                               color: Colors.white,
                             ),
