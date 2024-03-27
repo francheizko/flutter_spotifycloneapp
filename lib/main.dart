@@ -9,7 +9,16 @@ import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/signup
 import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/signup_4.dart";
 import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/signup_5.dart";
 
-void main() {
+// firebase
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+void main() async {
+   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+  options: DefaultFirebaseOptions.currentPlatform,
+);
+     
   runApp(
     const SpotifyCloneApp(),
   );
@@ -31,7 +40,7 @@ class _MyWidgetState extends State<SpotifyCloneApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Color(0xFFFCFCFC),
-        body: ChoosePodcastScreen(),
+        body: SignUp5(),
       ),
     );
   }

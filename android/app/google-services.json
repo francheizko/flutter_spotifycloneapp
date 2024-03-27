@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "642229586237",
+    "firebase_url": "https://spotifyclone-7f928-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "spotifyclone-7f928",
+    "storage_bucket": "spotifyclone-7f928.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:642229586237:android:66786dbcdb1eddc0ba5d54",
+        "android_client_info": {
+          "package_name": "ph.edu.usjr.flutter_spotifycloneapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEPRe-yO1omAdxHGbgyUhaj0ZDlqlpPfI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
