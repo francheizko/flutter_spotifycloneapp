@@ -8,6 +8,7 @@ import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/signup
 import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/signup_3.dart";
 import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/signup_4.dart";
 import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/signup_5.dart";
+import "package:flutter_spotifycloneapp/homescreen%20pages/home_screen.dart";
 
 void main() {
   runApp(
@@ -31,7 +32,7 @@ class _MyWidgetState extends State<SpotifyCloneApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Color(0xFFFCFCFC),
-        body: ChoosePodcastScreen(),
+        body: HomeScreen(),
       ),
     );
   }
