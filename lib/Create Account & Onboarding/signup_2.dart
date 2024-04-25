@@ -10,8 +10,9 @@ class SignUp2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final signUpData = Provider.of<SignUpData>(context);
     return SignUpDataProvider(
-      signUpData: SignUpData(),
+      signUpData: signUpData,
       child: Scaffold(
         backgroundColor: backgroundc,
         body: Padding(
@@ -102,6 +103,8 @@ class SignUp2 extends StatelessWidget {
                 ),
                 child: GestureDetector(
                   onTap: () {
+                     final signUpData = Provider.of<SignUpData>(context, listen: false);
+                  print('Stored password: ${signUpData.password}');
                     Navigator.pushNamed(context, '/signup3');
                   },
                   child: Container(

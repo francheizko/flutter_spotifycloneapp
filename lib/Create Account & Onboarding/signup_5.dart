@@ -1,10 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/sign_up_data.dart';
 import 'package:flutter_spotifycloneapp/constants/constants.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_spotifycloneapp/Create Account & Onboarding/sign_up_data_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -23,23 +24,65 @@ class _SignUp5State extends State<SignUp5> {
   bool newsAndOffersSelected = false;
   bool registrationDataSelected = false;
 
-  TextEditingController _nameController = TextEditingController();
+   TextEditingController _nameController = TextEditingController();
   
-void sendFinalDataToFirebase() {
+// void sendFinalDataToFirebase()async {
+//   SignUpData signUpData = Provider.of<SignUpData>(context, listen: false);
+
+ 
+//   signUpData.name = _nameController.text;
+//   signUpData.agreeToTerms = spotifyTermsSelected;
+//   signUpData.receiveNewsAndOffers = newsAndOffersSelected;
+//   signUpData.shareRegistrationData = registrationDataSelected;
+
+//   print('SignUpData before sending to Firebase:');
+//   print(signUpData.toJson());
+
+  
+//   print('Sending data to Firestore...');
+//   firestore.collection(collectionName).add(signUpData.toJson()).then((value) {
+//     print('Data sent successfully.');
+//   }).catchError((error) {
+//     print('Error sending data to Firestore: $error');
+//   });
+// }
+
+void sendFinalDataToFirebase() async {
   // Get the final data from the provider
-  SignUpData signUpData = SignUpDataProvider.of(context)!.signUpData;
-  signUpData.name = _nameController.text; // Update name from text field
+  SignUpData signUpData = Provider.of<SignUpData>(context, listen: false);
 
-  // Print all the data stored in the SignUpData object
-  print('Submitted data:');
-  print('Name: ${signUpData.name}');
-  signUpData.toJson().forEach((key, value) {
-    print('$key: $value');
-  });
+  // Update the properties with the values from the current screen
+  signUpData.name = _nameController.text;
+  signUpData.agreeToTerms = spotifyTermsSelected;
+  signUpData.receiveNewsAndOffers = newsAndOffersSelected;
+  signUpData.shareRegistrationData = registrationDataSelected;
 
-  // Send data to Firestore database
-  firestore.collection(collectionName).add(signUpData.toJson());
+  // Print the SignUpData before sending to Firebase
+  print('SignUpData before sending to Firebase:');
+  print(signUpData.toJson());
+
+  try {
+    // Create the user account with email and password in Firebase Authentication
+    UserCredential userCredential = await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+            email: signUpData.email, password: signUpData.password);
+
+    // Get the user ID from the created user credential
+    String userId = userCredential.user!.uid;
+
+    // Send data to Firestore database with the user ID as the document ID
+    print('Sending data to Firestore...');
+    await firestore.collection(collectionName).doc(userId).set(signUpData.toJson());
+    print('Data sent successfully.');
+  } catch (e) {
+    print('Error sending data to Firestore: $e');
+  }
 }
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return SignUpDataProvider(
@@ -239,7 +282,7 @@ void sendFinalDataToFirebase() {
               Row(
                 children: [
                   Text(
-                    'Please send me news and offers from Spotify.',
+                    'Please send me news and offers   from Spotify.',
                     style: TextStyle(
                       fontFamily: 'AvenirNext',
                       fontSize: MediaQuery.of(context).size.width * 0.030,
@@ -333,6 +376,9 @@ void sendFinalDataToFirebase() {
               ),
               Center(
                 child: GestureDetector(
+
+      
+
                   onTap: sendFinalDataToFirebase,
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.45,

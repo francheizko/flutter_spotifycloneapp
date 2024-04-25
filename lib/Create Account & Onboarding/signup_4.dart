@@ -10,8 +10,9 @@ class SignUp4 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final signUpData = Provider.of<SignUpData>(context);
     return SignUpDataProvider(
-      signUpData: SignUpData(),
+      signUpData: signUpData,
       child: Scaffold(
         backgroundColor: backgroundc,
         body: Padding(
@@ -108,7 +109,9 @@ class SignUp4 extends StatelessWidget {
                 ),
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, '/signup5');
+                     final signUpData = Provider.of<SignUpData>(context, listen: false);
+                  print('Stored date of birth: ${signUpData.dob}');
+                    Navigator.pushReplacementNamed(context, '/signup5');
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.2,

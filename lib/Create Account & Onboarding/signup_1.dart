@@ -74,7 +74,9 @@ class SignUp1 extends StatelessWidget {
                     horizontal: MediaQuery.of(context).size.width * 0.3),
                 child: GestureDetector(
                   onTap: () {
-                  
+                  final signUpData = Provider.of<SignUpData>(context, listen: false);
+                  print('Stored email: ${signUpData.email}');
+
                     Navigator.pushNamed(context, '/signup2');
                   },
                   child: Container(
@@ -97,6 +99,7 @@ class SignUp1 extends StatelessWidget {
                   ),
                 ),
               ),
+              
     
             ],
           ),

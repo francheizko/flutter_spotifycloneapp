@@ -5,7 +5,7 @@ import 'sign_up_data.dart';
 class SignUpDataProvider extends InheritedWidget {
   final SignUpData signUpData;
 
-  SignUpDataProvider({required this.signUpData, required Widget child}) : super(child: child);
+  const SignUpDataProvider({super.key, required this.signUpData, required super.child});
 
   static SignUpDataProvider? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<SignUpDataProvider>();

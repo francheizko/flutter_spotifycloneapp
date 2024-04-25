@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:flutter_spotifycloneapp/constants/constants.dart';
 import 'package:flutter_spotifycloneapp/models/artist_model.dart';
 import 'package:flutter_spotifycloneapp/models/podcast_model.dart';
