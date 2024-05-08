@@ -48,29 +48,27 @@ class _SignUp5State extends State<SignUp5> {
 // }
 
 void sendFinalDataToFirebase() async {
-  // Get the final data from the provider
+  
   SignUpData signUpData = Provider.of<SignUpData>(context, listen: false);
 
-  // Update the properties with the values from the current screen
+  
   signUpData.name = _nameController.text;
   signUpData.agreeToTerms = spotifyTermsSelected;
   signUpData.receiveNewsAndOffers = newsAndOffersSelected;
   signUpData.shareRegistrationData = registrationDataSelected;
 
-  // Print the SignUpData before sending to Firebase
   print('SignUpData before sending to Firebase:');
   print(signUpData.toJson());
 
   try {
-    // Create the user account with email and password in Firebase Authentication
+    
     UserCredential userCredential = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(
             email: signUpData.email, password: signUpData.password);
 
-    // Get the user ID from the created user credential
     String userId = userCredential.user!.uid;
 
-    // Send data to Firestore database with the user ID as the document ID
+   
     print('Sending data to Firestore...');
     await firestore.collection(collectionName).doc(userId).set(signUpData.toJson());
     print('Data sent successfully.');
