@@ -209,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           'assets/images/hothitsph.jpeg',
                           width: MediaQuery.of(context).size.width * 0.15,
                           height: MediaQuery.of(context).size.height * 0.07,
-                          fit: BoxFit.cover, // Adjust the fit as needed
+                          fit: BoxFit.cover,
                         ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.02,

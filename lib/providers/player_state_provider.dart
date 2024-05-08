@@ -9,7 +9,7 @@ final playerStateProvider =
 
 class PlayerStateNotifier extends ChangeNotifier {
   double seekbarValue = 0, volumeValue = 0.5, totalDuration = 0;
-  bool isPlaying = false, isMuted = false;
+  bool isPlaying = false, isPaused = false, isMuted = false;
   AudioPlayer player = AudioPlayer();
 
   void onLoad(String songPath) {
@@ -77,6 +77,7 @@ class PlayerStateNotifier extends ChangeNotifier {
           .resume(); // This will either start or resume the player based on its current state
     } else {
       player.pause();
+      isPaused = !isPaused;
     }
     isPlaying = !isPlaying;
     notifyListeners();

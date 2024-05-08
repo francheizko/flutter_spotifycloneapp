@@ -3,18 +3,8 @@ import "dart:io";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
-import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/choose_artist.dart";
-import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/choose_podcast.dart";
-
-import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/landing_screen.dart";
-import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/login_screen.dart";
-import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/signup_1.dart";
-import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/signup_2.dart";
-import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/signup_3.dart";
-import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/signup_4.dart";
-import "package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/signup_5.dart";
-import "package:flutter_spotifycloneapp/homescreen%20pages/album_view.dart";
 import "package:flutter_spotifycloneapp/homescreen%20pages/home_screen.dart";
+import "package:flutter_spotifycloneapp/homescreen%20pages/track_view.dart";
 
 void main() {
   FlutterError.onError = (details) {
@@ -40,7 +30,7 @@ class _MyWidgetState extends State<SpotifyCloneApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Color(0xFFFCFCFC),
-        body: LoginScreen(),
+        body: HomeScreen(),
       ),
     );
   }

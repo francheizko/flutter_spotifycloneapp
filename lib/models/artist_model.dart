@@ -1,6 +1,7 @@
 class Artists {
   final String name;
   final String imagePath;
+
   String genre;
 
   Artists({

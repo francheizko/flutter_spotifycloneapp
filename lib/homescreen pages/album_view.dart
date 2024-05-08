@@ -168,36 +168,39 @@ class AlbumView extends ConsumerWidget {
                   ),
                 ],
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.width * 0.05,
-              ),
               Expanded(
-                child: ListView(
-                  children: [
-                    GestureDetector(
+                child: ListView.builder(
+                  itemCount: ref.read(audioProvider).playlistLength(),
+                  itemBuilder: (BuildContext context, int index) {
+                    final music = ref.read(audioProvider).getMusicList()[index];
+                    final audio =
+                        ref.read(audioProvider).getAudioFilePaths()[index];
+                    final isSelected =
+                        (ref.read(playerStateProvider).isPlaying ||
+                                ref.read(playerStateProvider).isPaused) &&
+                            ref.read(audioProvider).getAudio() == audio;
+
+                    return GestureDetector(
                       onTap: () {
-                        String currentSong = 'Musics/hev-abi-walang-alam.mp3';
-                        if (ref.read(audioProvider).getAudio() == currentSong) {
+                        final audio =
+                            ref.read(audioProvider).getAudioFilePaths()[index];
+                        final currentAudio = ref.read(audioProvider).getAudio();
+
+                        if (currentAudio == audio) {
                           ref
                               .read(playerStateProvider.notifier)
-                              .restartSong(currentSong);
+                              .restartSong(audio);
                         } else {
-                          ref
-                              .read(audioProvider.notifier)
-                              .setAudio(currentSong);
-                          ref
-                              .read(playerStateProvider.notifier)
-                              .onLoad(currentSong);
-                          ref
-                              .read(playerStateProvider.notifier)
-                              .onPlay(); // This line will now be responsible for starting the song
+                          ref.read(audioProvider.notifier).setAudio(audio);
+                          ref.read(playerStateProvider.notifier).onLoad(audio);
+                          ref.read(playerStateProvider.notifier).onPlay();
                         }
                       },
                       child: SizedBox(
                         child: Row(
                           children: [
                             Image.asset(
-                              'assets/images/hev-abi.jpeg',
+                              music.imagePath,
                               width: MediaQuery.of(context).size.width * 0.13,
                               height:
                                   MediaQuery.of(context).size.height * 0.055,
@@ -206,23 +209,23 @@ class AlbumView extends ConsumerWidget {
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.02,
                             ),
-                            const Expanded(
+                            Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Walang Alam',
+                                    music.title,
                                     style: TextStyle(
                                       fontFamily: 'AvenirNext',
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
-                                      color: lwhite,
+                                      color: isSelected ? lgreen : lwhite,
                                     ),
                                     textAlign: TextAlign.left,
                                   ),
                                   Text(
-                                    'Hev Abi',
-                                    style: TextStyle(
+                                    music.artistName,
+                                    style: const TextStyle(
                                       fontFamily: 'AvenirNext',
                                       fontSize: 14,
                                       color: lwhite,
@@ -245,88 +248,8 @@ class AlbumView extends ConsumerWidget {
                           ],
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.width * 0.015,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        String currentSong =
-                            'Musics/oh-caraga-ayawnag-hilak.mp3';
-                        if (ref.read(audioProvider).getAudio() == currentSong) {
-                          ref
-                              .read(playerStateProvider.notifier)
-                              .restartSong(currentSong);
-                        } else {
-                          ref
-                              .read(audioProvider.notifier)
-                              .setAudio(currentSong);
-                          ref
-                              .read(playerStateProvider.notifier)
-                              .onLoad(currentSong);
-                          ref
-                              .read(playerStateProvider.notifier)
-                              .onPlay(); // This line will now be responsible for starting the song
-                        }
-                      },
-                      child: SizedBox(
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'assets/images/oh-caraga.jpeg',
-                              width: MediaQuery.of(context).size.width * 0.13,
-                              height:
-                                  MediaQuery.of(context).size.height * 0.055,
-                              fit: BoxFit.cover,
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.02,
-                            ),
-                            const Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Ayaw Nag Hilak',
-                                    style: TextStyle(
-                                      fontFamily: 'AvenirNext',
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: lwhite,
-                                    ),
-                                    textAlign: TextAlign.left,
-                                  ),
-                                  Text(
-                                    'Hev Abi',
-                                    style: TextStyle(
-                                      fontFamily: 'AvenirNext',
-                                      fontSize: 14,
-                                      color: lwhite,
-                                    ),
-                                    textAlign: TextAlign.left,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: SvgPicture.asset(
-                                'assets/images/More.svg',
-                                width:
-                                    MediaQuery.of(context).size.width * 0.005,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.005,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.width * 0.015,
-                    ),
-                    // Add more GestureDetector widgets here for additional music items
-                  ],
+                    );
+                  },
                 ),
               ),
             ],
