@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_spotifycloneapp/constants/constants.dart';
+import 'package:flutter_spotifycloneapp/homescreen%20pages/album_view.dart';
 import 'package:flutter_spotifycloneapp/models/artist_model.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -74,37 +75,46 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Row(
                 children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.44,
-                    height: MediaQuery.of(context).size.height * 0.07,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(3),
-                      color: ldarkgray,
-                    ),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          'assets/images/todaystophits.jpeg',
-                          width: MediaQuery.of(context).size.width * 0.15,
-                          height: MediaQuery.of(context).size.height * 0.07,
-                          fit: BoxFit.cover, // Adjust the fit as needed
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.02,
-                        ),
-                        const Expanded(
-                          child: Text(
-                            'Today\'s Top Hits',
-                            style: TextStyle(
-                              fontFamily: 'AvenirNext',
-                              fontSize: 13,
-                              fontWeight: FontWeight.w800,
-                              color: lwhite,
-                            ),
-                            textAlign: TextAlign.left,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AlbumView()),
+                      );
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.44,
+                      height: MediaQuery.of(context).size.height * 0.07,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(3),
+                        color: ldarkgray,
+                      ),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/images/tth.jpeg',
+                            width: MediaQuery.of(context).size.width * 0.15,
+                            height: MediaQuery.of(context).size.height * 0.07,
+                            fit: BoxFit.cover, // Adjust the fit as needed
                           ),
-                        ),
-                      ],
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.02,
+                          ),
+                          const Expanded(
+                            child: Text(
+                              'Today\'s Top Hits',
+                              style: TextStyle(
+                                fontFamily: 'AvenirNext',
+                                fontSize: 13,
+                                fontWeight: FontWeight.w800,
+                                color: lwhite,
+                              ),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
