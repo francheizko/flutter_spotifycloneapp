@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spotifycloneapp/constants/constants.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,6 +12,27 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _obscureText = true;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> _login(String email, String password) async {
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      
+      Navigator.pushReplacementNamed(context, '/home_screen');
+    } catch (e) {
+      
+      print('Login error: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
               width: MediaQuery.of(context).size.width * 0.82,
               height: MediaQuery.of(context).size.height * 0.055,
               child: TextFormField(
+                controller: _emailController,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: ldarkgray,
@@ -69,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 style: const TextStyle(
-                    color: lwhite, fontFamily: 'AvenirNext', fontSize: 12),
+                    color: lwhite, fontFamily: 'AvenirNext', fontSize: 18),
               ),
             ),
             SizedBox(
@@ -89,6 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Stack(
                 children: [
                   TextFormField(
+                    controller: _passwordController,
                     obscureText: _obscureText,
                     decoration: InputDecoration(
                       filled: true,
@@ -127,7 +151,12 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: EdgeInsets.symmetric(
                   horizontal: MediaQuery.of(context).size.width * 0.3),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  String email = _emailController.text;
+                  String password = _passwordController.text.trim();
+
+                  _login(email, password);
+                },
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.2,
                   height: MediaQuery.of(context).size.height * 0.05,
