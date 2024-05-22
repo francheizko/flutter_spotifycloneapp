@@ -7,7 +7,8 @@ final audioProvider = ChangeNotifierProvider((ref) => AudioNotifier());
 class AudioNotifier extends ChangeNotifier {
   final List<String> audioFilePaths = [
     'Musics/hev-abi-walang-alam.mp3',
-    'Musics/oh-caraga-ayawnag-hilak.mp3'
+    'Musics/oh-caraga-ayawnag-hilak.mp3',
+    'Musics/olivia-rodrigo-traitor.mp3'
   ];
 
   List<Music> musicList = [
@@ -19,6 +20,10 @@ class AudioNotifier extends ChangeNotifier {
         title: 'Ayaw Nag Hilak',
         imagePath: 'assets/images/oh-caraga.jpeg',
         artistName: 'Oh Caraga!'),
+    Music(
+        title: 'Traitor',
+        imagePath: 'assets/images/olivia-rodrigo.jpeg',
+        artistName: 'Olivia Rodrigo'),
   ];
   String audio = '';
   int _index = 0;

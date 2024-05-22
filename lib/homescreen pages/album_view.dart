@@ -80,7 +80,7 @@ class AlbumView extends ConsumerWidget {
                 ),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.width * 0.05,
+                height: MediaQuery.of(context).size.width * 0.07,
               ),
               Row(
                 children: [
@@ -140,7 +140,7 @@ class AlbumView extends ConsumerWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * 0.04,
+                      top: MediaQuery.of(context).size.height * 0.001,
                     ),
                     child: GestureDetector(
                       onTap: () {
@@ -213,15 +213,36 @@ class AlbumView extends ConsumerWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    music.title,
-                                    style: TextStyle(
-                                      fontFamily: 'AvenirNext',
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: isSelected ? lgreen : lwhite,
-                                    ),
-                                    textAlign: TextAlign.left,
+                                  Row(
+                                    children: [
+                                      if (isSelected)
+                                        Image.asset(
+                                          'assets/images/audiowave-4.gif',
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.04,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.03,
+                                        ),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.005,
+                                      ),
+                                      Text(
+                                        music.title,
+                                        style: TextStyle(
+                                          fontFamily: 'AvenirNext',
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: isSelected ? lgreen : lwhite,
+                                        ),
+                                        textAlign: TextAlign.left,
+                                      ),
+                                    ],
                                   ),
                                   Text(
                                     music.artistName,
@@ -244,6 +265,9 @@ class AlbumView extends ConsumerWidget {
                                 height:
                                     MediaQuery.of(context).size.height * 0.005,
                               ),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.06,
                             ),
                           ],
                         ),

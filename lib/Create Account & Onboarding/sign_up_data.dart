@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// Step 1: Define a model class
 class SignUpData extends ChangeNotifier {
   String email = '';
   String password = '';
@@ -10,12 +9,21 @@ class SignUpData extends ChangeNotifier {
   bool agreeToTerms = false;
   bool receiveNewsAndOffers = false;
   bool shareRegistrationData = false;
+  bool _isBelowThirteen = false; // Add this line
+
+  bool get isBelowThirteen => _isBelowThirteen;
+  set isBelowThirteen(bool value) {
+    if (_isBelowThirteen != value) {
+      _isBelowThirteen = value;
+      notifyListeners();
+    }
+  }
 
   void setEmail(String value) {
     email = value;
     notifyListeners();
   }
-  
+
   void clearData() {
     email = '';
     password = '';
@@ -25,6 +33,7 @@ class SignUpData extends ChangeNotifier {
     agreeToTerms = false;
     receiveNewsAndOffers = false;
     shareRegistrationData = false;
+    _isBelowThirteen = false; // Reset this as well
     notifyListeners();
   }
 
@@ -39,6 +48,7 @@ class SignUpData extends ChangeNotifier {
       'agreeToTerms': agreeToTerms,
       'receiveNewsAndOffers': receiveNewsAndOffers,
       'shareRegistrationData': shareRegistrationData,
+      'isBelowThirteen': _isBelowThirteen // Include this in your JSON if needed
     };
   }
 }

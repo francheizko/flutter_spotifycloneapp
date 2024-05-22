@@ -22,15 +22,15 @@ import 'package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/sign_u
 import 'package:provider/provider.dart' as provider;
 
 void main() async {
-  FlutterError.onError = (details) {
-    FlutterError.presentError(details);
-    if (kReleaseMode) exit(1);
-  };
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+    if (kReleaseMode) exit(1);
+  };
 
   runApp(
     provider.MultiProvider(
@@ -58,11 +58,11 @@ class _MyWidgetState extends State<SpotifyCloneApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => const SignUp1(),
+        '/': (context) => const LandingScreen(),
         '/signup2': (context) => const SignUp2(),
         '/choose_artist': (context) => const ChooseArtistScreen(),
         '/choose_podcast': (context) => const ChoosePodcastScreen(),
-        '/landing_screen': (context) => const LandingScreen(),
+        '/signup1': (context) => const SignUp1(),
         '/signup3': (context) => const SignUp3(),
         '/signup4': (context) => const SignUp4(),
         '/signup5': (context) => const SignUp5(),

@@ -54,25 +54,31 @@ class LandingScreen extends StatelessWidget {
                   const SizedBox(
                     height: 22,
                   ),
-                  Container(
-                    width: 350,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(45),
-                      color: lgreen,
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Sign up free',
-                        style: TextStyle(
-                          fontFamily: 'AvenirNext',
-                          fontSize: 16,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w900,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/signup1');
+                    },
+                    child: Container(
+                      width: 350,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(45),
+                        color: lgreen,
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'Sign up free',
+                          style: TextStyle(
+                            fontFamily: 'AvenirNext',
+                            fontSize: 16,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
                       ),
                     ),
                   ),
+                  const SizedBox(height: 12),
                   const SizedBox(
                     height: 12,
                   ),
@@ -184,14 +190,20 @@ class LandingScreen extends StatelessWidget {
                   const SizedBox(
                     height: 25,
                   ),
-                  const Text(
-                    'Log in',
-                    style: TextStyle(
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/login_screen');
+                    },
+                    child: const Text(
+                      'Log in',
+                      style: TextStyle(
                         fontFamily: 'AvenirNext',
                         fontSize: 16,
                         color: lwhite,
-                        fontWeight: FontWeight.w900),
-                  )
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

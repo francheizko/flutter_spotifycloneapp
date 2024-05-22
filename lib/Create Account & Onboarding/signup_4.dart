@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/sign_up_data.dart';
 import 'package:flutter_spotifycloneapp/constants/constants.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:flutter_spotifycloneapp/Create Account & Onboarding/sign_up_data_provider.dart';
 import 'package:provider/provider.dart';
 
-class SignUp4 extends StatelessWidget {
+class SignUp4 extends StatefulWidget {
   const SignUp4({Key? key}) : super(key: key);
 
   @override
+  _SignUp4State createState() => _SignUp4State();
+}
+
+class _SignUp4State extends State<SignUp4> {
+  @override
   Widget build(BuildContext context) {
     final signUpData = Provider.of<SignUpData>(context);
+
     return SignUpDataProvider(
       signUpData: signUpData,
       child: Scaffold(
@@ -58,12 +64,10 @@ class SignUp4 extends StatelessWidget {
                   color: lwhite,
                 ),
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
-              ),
               Consumer<SignUpData>(
                 builder: (context, signUpData, _) {
-                  TextEditingController _controller = TextEditingController(text: signUpData.dob);
+                  TextEditingController _controller =
+                      TextEditingController(text: signUpData.dob);
                   return Container(
                     width: MediaQuery.of(context).size.width * 0.82,
                     height: MediaQuery.of(context).size.height * 0.055,
@@ -81,21 +85,52 @@ class SignUp4 extends StatelessWidget {
                           lastDate: DateTime.now(),
                         );
                         if (picked != null) {
-                          // Format the picked date as desired
-                          String formattedDate = '${picked.year}-${picked.month}-${picked.day}';
-                          // Update the date of birth value in the provider
+                          String formattedDate =
+                              '${picked.year}-${picked.month}-${picked.day}';
                           signUpData.dob = formattedDate;
                           _controller.text = formattedDate;
+
+                          DateTime today = DateTime.now();
+                          int age = today.year - picked.year;
+                          if (picked.month > today.month ||
+                              (picked.month == today.month &&
+                                  picked.day > today.day)) {
+                            age--;
+                          }
+
+                          signUpData.isBelowThirteen = age < 13;
                         }
                       },
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Select your date of birth',
-                        hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                        hintStyle:
+                            TextStyle(color: Colors.black.withOpacity(0.5)),
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 10),
                       ),
-                      style: TextStyle(color: Colors.black),
+                      style: TextStyle(
+                        color: signUpData.isBelowThirteen
+                            ? Colors.red
+                            : Colors.black,
+                        fontSize: 14,
+                      ),
                       controller: _controller,
+                    ),
+                  );
+                },
+              ),
+              Consumer<SignUpData>(
+                builder: (context, signUpData, _) {
+                  return Visibility(
+                    visible: signUpData.isBelowThirteen,
+                    child: const Text(
+                      "Sorry, you don't meet Spotify's age requirement",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 12,
+                      ),
+                      textAlign: TextAlign.start,
                     ),
                   );
                 },
@@ -107,27 +142,34 @@ class SignUp4 extends StatelessWidget {
                 padding: EdgeInsets.symmetric(
                   horizontal: MediaQuery.of(context).size.width * 0.3,
                 ),
-                child: GestureDetector(
-                  onTap: () {
-                     final signUpData = Provider.of<SignUpData>(context, listen: false);
-                  print('Stored date of birth: ${signUpData.dob}');
-                    Navigator.pushReplacementNamed(context, '/signup5');
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.2,
-                    height: MediaQuery.of(context).size.height * 0.05,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(21),
-                      color: lldarkergray,
-                    ),
-                    child: const Center(
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.2,
+                  height: MediaQuery.of(context).size.height * 0.05,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(21),
+                    color: signUpData.isBelowThirteen
+                        ? lldarkergray
+                        : Colors.white, // Change color based on condition
+                  ),
+                  child: InkWell(
+                    onTap: signUpData.isBelowThirteen
+                        ? null
+                        : () {
+                            // Disable tap if the condition is not met
+                            print('Stored date of birth: ${signUpData.dob}');
+                            Navigator.pushReplacementNamed(context, '/signup3');
+                          },
+                    child: Center(
                       child: Text(
                         'Next',
                         style: TextStyle(
                           fontFamily: 'AvenirNext',
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black,
+                          color: signUpData.isBelowThirteen
+                              ? Colors.grey
+                              : Colors
+                                  .black, // Change text color based on condition
                         ),
                       ),
                     ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_spotifycloneapp/constants/constants.dart';
 import 'package:flutter_spotifycloneapp/homescreen%20pages/album_view.dart';
+import 'package:flutter_spotifycloneapp/homescreen%20pages/bottom_navbar.dart';
 import 'package:flutter_spotifycloneapp/models/artist_model.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -18,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: backgroundc,
         title: const Text(
           'Good morning',

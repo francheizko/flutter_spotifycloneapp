@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/sign_up_data.dart';
 import 'package:flutter_spotifycloneapp/constants/constants.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,10 +8,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-String collectionName = 'users'; 
+String collectionName = 'users';
 
 class SignUp5 extends StatefulWidget {
   const SignUp5({Key? key}) : super(key: key);
@@ -23,64 +23,94 @@ class _SignUp5State extends State<SignUp5> {
   bool spotifyTermsSelected = false;
   bool newsAndOffersSelected = false;
   bool registrationDataSelected = false;
+  bool _isLoading = false; // Added to track loading state
 
-   TextEditingController _nameController = TextEditingController();
-  
-// void sendFinalDataToFirebase()async {
-//   SignUpData signUpData = Provider.of<SignUpData>(context, listen: false);
+  TextEditingController _nameController = TextEditingController();
 
- 
-//   signUpData.name = _nameController.text;
-//   signUpData.agreeToTerms = spotifyTermsSelected;
-//   signUpData.receiveNewsAndOffers = newsAndOffersSelected;
-//   signUpData.shareRegistrationData = registrationDataSelected;
+  void sendFinalDataToFirebase() async {
+    setState(() {
+      _isLoading = true; // Start loading
+    });
 
-//   print('SignUpData before sending to Firebase:');
-//   print(signUpData.toJson());
+    SignUpData signUpData = Provider.of<SignUpData>(context, listen: false);
+    signUpData.name = _nameController.text;
+    signUpData.agreeToTerms = spotifyTermsSelected;
+    signUpData.receiveNewsAndOffers = newsAndOffersSelected;
+    signUpData.shareRegistrationData = registrationDataSelected;
 
-  
-//   print('Sending data to Firestore...');
-//   firestore.collection(collectionName).add(signUpData.toJson()).then((value) {
-//     print('Data sent successfully.');
-//   }).catchError((error) {
-//     print('Error sending data to Firestore: $error');
-//   });
-// }
+    if (signUpData.email.isEmpty || signUpData.password.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Error"),
+          content: const Text("Email and password cannot be empty."),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      );
+      setState(() {
+        _isLoading = false; // Stop loading
+      });
+      return; // Exit the function early as there's no point proceeding further
+    }
 
-void sendFinalDataToFirebase() async {
-  
-  SignUpData signUpData = Provider.of<SignUpData>(context, listen: false);
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: signUpData.email, password: signUpData.password);
+      String userId = userCredential.user!.uid;
 
-  
-  signUpData.name = _nameController.text;
-  signUpData.agreeToTerms = spotifyTermsSelected;
-  signUpData.receiveNewsAndOffers = newsAndOffersSelected;
-  signUpData.shareRegistrationData = registrationDataSelected;
-
-  print('SignUpData before sending to Firebase:');
-  print(signUpData.toJson());
-
-  try {
-    
-    UserCredential userCredential = await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(
-            email: signUpData.email, password: signUpData.password);
-
-    String userId = userCredential.user!.uid;
-
-   
-    print('Sending data to Firestore...');
-    await firestore.collection(collectionName).doc(userId).set(signUpData.toJson());
-    print('Data sent successfully.');
+      await firestore
+          .collection(collectionName)
+          .doc(userId)
+          .set(signUpData.toJson());
       Navigator.pushReplacementNamed(context, '/login_screen');
-  } catch (e) {
-    print('Error sending data to Firestore: $e');
+
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Success!"),
+          content:
+              const Text("Your Spotify account has been created successfully."),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      );
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Error"),
+          content: Text("Failed to create account: $e"),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      );
+      print('Error sending data to Firestore: $e');
+    } finally {
+      setState(() {
+        _isLoading = false; // Stop loading
+      });
+    }
   }
-}
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -100,10 +130,15 @@ void sendFinalDataToFirebase() async {
               ),
               Row(
                 children: [
-                  SvgPicture.asset(
-                    'assets/images/ChevronLeft.svg',
-                    width: MediaQuery.of(context).size.width * 0.04,
-                    height: MediaQuery.of(context).size.height * 0.04,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: SvgPicture.asset(
+                      'assets/images/ChevronLeft.svg',
+                      width: MediaQuery.of(context).size.width * 0.04,
+                      height: MediaQuery.of(context).size.height * 0.04,
+                    ),
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.2,
@@ -131,7 +166,7 @@ void sendFinalDataToFirebase() async {
                   color: lwhite,
                 ),
               ),
-             TextField(
+              TextField(
                 controller: _nameController,
                 decoration: InputDecoration(
                   hintText: 'Enter your name',
@@ -147,6 +182,10 @@ void sendFinalDataToFirebase() async {
                     borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide.none,
                   ),
+                  contentPadding: const EdgeInsets.symmetric(
+                      vertical: 15,
+                      horizontal:
+                          10), // Adjust vertical padding to change height
                 ),
                 style: const TextStyle(
                   fontFamily: 'AvenirNext',
@@ -203,8 +242,7 @@ void sendFinalDataToFirebase() async {
                     'I agree to the Spotify Terms of Use and Privacy Policy.',
                     style: TextStyle(
                       fontFamily: 'AvenirNext',
-                      fontSize:
-                          MediaQuery.of(context).size.width * 0.023,
+                      fontSize: MediaQuery.of(context).size.width * 0.023,
                       fontWeight: FontWeight.w600,
                       color: lwhite,
                     ),
@@ -222,17 +260,13 @@ void sendFinalDataToFirebase() async {
                       child: spotifyTermsSelected
                           ? Image.asset(
                               'assets/images/checked_icon.png',
-                              width:
-                                  MediaQuery.of(context).size.width * 0.07,
-                              height:
-                                  MediaQuery.of(context).size.width * 0.07,
+                              width: MediaQuery.of(context).size.width * 0.07,
+                              height: MediaQuery.of(context).size.width * 0.07,
                             )
                           : Image.asset(
                               'assets/images/circled-thin-24.png',
-                              width:
-                                  MediaQuery.of(context).size.width * 0.07,
-                              height:
-                                  MediaQuery.of(context).size.width * 0.07,
+                              width: MediaQuery.of(context).size.width * 0.07,
+                              height: MediaQuery.of(context).size.width * 0.07,
                               fit: BoxFit.contain,
                             ),
                     ),
@@ -302,17 +336,13 @@ void sendFinalDataToFirebase() async {
                       child: newsAndOffersSelected
                           ? Image.asset(
                               'assets/images/checked_icon.png',
-                              width:
-                                  MediaQuery.of(context).size.width * 0.07,
-                              height:
-                                  MediaQuery.of(context).size.width * 0.07,
+                              width: MediaQuery.of(context).size.width * 0.07,
+                              height: MediaQuery.of(context).size.width * 0.07,
                             )
                           : Image.asset(
                               'assets/images/circled-thin-24.png',
-                              width:
-                                  MediaQuery.of(context).size.width * 0.07,
-                              height:
-                                  MediaQuery.of(context).size.width * 0.07,
+                              width: MediaQuery.of(context).size.width * 0.07,
+                              height: MediaQuery.of(context).size.width * 0.07,
                               fit: BoxFit.contain,
                             ),
                     ),
@@ -331,8 +361,7 @@ void sendFinalDataToFirebase() async {
                       'Share my registration data with Spotify\'s content providers for marketing purposes.',
                       style: TextStyle(
                         fontFamily: 'AvenirNext',
-                        fontSize:
-                            MediaQuery.of(context).size.width * 0.030,
+                        fontSize: MediaQuery.of(context).size.width * 0.030,
                         fontWeight: FontWeight.w600,
                         color: lwhite,
                       ),
@@ -353,17 +382,13 @@ void sendFinalDataToFirebase() async {
                       child: registrationDataSelected
                           ? Image.asset(
                               'assets/images/checked_icon.png',
-                              width:
-                                  MediaQuery.of(context).size.width * 0.07,
-                              height:
-                                  MediaQuery.of(context).size.width * 0.07,
+                              width: MediaQuery.of(context).size.width * 0.07,
+                              height: MediaQuery.of(context).size.width * 0.07,
                             )
                           : Image.asset(
                               'assets/images/circled-thin-24.png',
-                              width:
-                                  MediaQuery.of(context).size.width * 0.07,
-                              height:
-                                  MediaQuery.of(context).size.width * 0.07,
+                              width: MediaQuery.of(context).size.width * 0.07,
+                              height: MediaQuery.of(context).size.width * 0.07,
                               fit: BoxFit.contain,
                             ),
                     ),
@@ -375,27 +400,28 @@ void sendFinalDataToFirebase() async {
               ),
               Center(
                 child: GestureDetector(
-
-      
-
-                  onTap: sendFinalDataToFirebase,
+                  onTap: spotifyTermsSelected && !_isLoading
+                      ? sendFinalDataToFirebase
+                      : null,
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.45,
                     height: MediaQuery.of(context).size.height * 0.05,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(21),
-                      color: lwhite,
+                      color: spotifyTermsSelected ? lwhite : lldarkergray,
                     ),
-                    child: const Center(
-                      child: Text(
-                        'Create an account',
-                        style: TextStyle(
-                          fontFamily: 'AvenirNext',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
-                      ),
+                    child: Center(
+                      child: _isLoading
+                          ? const CircularProgressIndicator()
+                          : const Text(
+                              'Create an account',
+                              style: TextStyle(
+                                fontFamily: 'AvenirNext',
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
+                            ),
                     ),
                   ),
                 ),

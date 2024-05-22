@@ -49,7 +49,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '642229586237',
     projectId: 'spotifyclone-7f928',
     authDomain: 'spotifyclone-7f928.firebaseapp.com',
-    databaseURL: 'https://spotifyclone-7f928-default-rtdb.asia-southeast1.firebasedatabase.app',
+    databaseURL:
+        'https://spotifyclone-7f928-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'spotifyclone-7f928.appspot.com',
   );
 
@@ -58,7 +59,8 @@ class DefaultFirebaseOptions {
     appId: '1:642229586237:android:66786dbcdb1eddc0ba5d54',
     messagingSenderId: '642229586237',
     projectId: 'spotifyclone-7f928',
-    databaseURL: 'https://spotifyclone-7f928-default-rtdb.asia-southeast1.firebasedatabase.app',
+    databaseURL:
+        'https://spotifyclone-7f928-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'spotifyclone-7f928.appspot.com',
   );
 
@@ -67,7 +69,8 @@ class DefaultFirebaseOptions {
     appId: '1:642229586237:ios:c56ba6abbe82239aba5d54',
     messagingSenderId: '642229586237',
     projectId: 'spotifyclone-7f928',
-    databaseURL: 'https://spotifyclone-7f928-default-rtdb.asia-southeast1.firebasedatabase.app',
+    databaseURL:
+        'https://spotifyclone-7f928-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'spotifyclone-7f928.appspot.com',
     iosBundleId: 'ph.edu.usjr.flutterSpotifycloneapp',
   );
@@ -77,7 +80,8 @@ class DefaultFirebaseOptions {
     appId: '1:642229586237:ios:d69266df247d61baba5d54',
     messagingSenderId: '642229586237',
     projectId: 'spotifyclone-7f928',
-    databaseURL: 'https://spotifyclone-7f928-default-rtdb.asia-southeast1.firebasedatabase.app',
+    databaseURL:
+        'https://spotifyclone-7f928-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'spotifyclone-7f928.appspot.com',
     iosBundleId: 'ph.edu.usjr.flutterSpotifycloneapp.RunnerTests',
   );
