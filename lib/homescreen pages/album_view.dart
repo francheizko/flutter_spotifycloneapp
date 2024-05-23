@@ -1,19 +1,18 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_spotifycloneapp/constants/constants.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spotifycloneapp/providers/audio_player.dart';
 import 'package:flutter_spotifycloneapp/providers/audio_provider.dart';
 import 'package:flutter_spotifycloneapp/providers/player_state_provider.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_spotifycloneapp/constants/constants.dart';
 
 class AlbumView extends ConsumerWidget {
-  const AlbumView({super.key});
+  const AlbumView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playerState = ref.watch(playerStateProvider);
+    final musicList = ref.watch(audioProvider).getMusicList();
 
     return Scaffold(
       backgroundColor: backgroundc,
@@ -35,9 +34,7 @@ class AlbumView extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.08,
-              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.08),
               Row(
                 children: [
                   GestureDetector(
@@ -50,14 +47,10 @@ class AlbumView extends ConsumerWidget {
                       height: MediaQuery.of(context).size.height * 0.025,
                     ),
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.2,
-                  ),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.2),
                 ],
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.width * 0.05,
-              ),
+              SizedBox(height: MediaQuery.of(context).size.width * 0.05),
               Center(
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.5,
@@ -79,9 +72,7 @@ class AlbumView extends ConsumerWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.width * 0.07,
-              ),
+              SizedBox(height: MediaQuery.of(context).size.width * 0.07),
               Row(
                 children: [
                   Column(
@@ -105,9 +96,7 @@ class AlbumView extends ConsumerWidget {
                           color: Colors.white,
                         ),
                       ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.width * 0.02,
-                      ),
+                      SizedBox(height: MediaQuery.of(context).size.width * 0.02),
                       Row(
                         children: [
                           SvgPicture.asset(
@@ -115,17 +104,13 @@ class AlbumView extends ConsumerWidget {
                             width: MediaQuery.of(context).size.width * 0.025,
                             height: MediaQuery.of(context).size.height * 0.025,
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.07,
-                          ),
+                          SizedBox(width: MediaQuery.of(context).size.width * 0.07),
                           SvgPicture.asset(
                             'assets/images/Download.svg',
                             width: MediaQuery.of(context).size.width * 0.027,
                             height: MediaQuery.of(context).size.height * 0.027,
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.07,
-                          ),
+                          SizedBox(width: MediaQuery.of(context).size.width * 0.07),
                           SvgPicture.asset(
                             'assets/images/More.svg',
                             width: MediaQuery.of(context).size.width * 0.005,
@@ -135,9 +120,7 @@ class AlbumView extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.25,
-                  ),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.25),
                   Padding(
                     padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height * 0.001,
@@ -150,17 +133,13 @@ class AlbumView extends ConsumerWidget {
                         child: playerState.isPlaying
                             ? SvgPicture.asset(
                                 'assets/images/stop.svg',
-                                width:
-                                    MediaQuery.of(context).size.width * 0.065,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.065,
+                                width: MediaQuery.of(context).size.width * 0.065,
+                                height: MediaQuery.of(context).size.height * 0.065,
                               )
                             : SvgPicture.asset(
                                 'assets/images/Playbutton.svg',
-                                width:
-                                    MediaQuery.of(context).size.width * 0.065,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.065,
+                                width: MediaQuery.of(context).size.width * 0.065,
+                                height: MediaQuery.of(context).size.height * 0.065,
                                 fit: BoxFit.contain,
                               ),
                       ),
@@ -170,104 +149,92 @@ class AlbumView extends ConsumerWidget {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: ref.read(audioProvider).playlistLength(),
+                  itemCount: musicList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final music = ref.read(audioProvider).getMusicList()[index];
-                    final audio =
-                        ref.read(audioProvider).getAudioFilePaths()[index];
-                    final isSelected =
-                        (ref.read(playerStateProvider).isPlaying ||
-                                ref.read(playerStateProvider).isPaused) &&
-                            ref.read(audioProvider).getAudio() == audio;
+                    final music = musicList[index];
+                    final audio = ref.read(audioProvider).getAudioFilePaths()[index];
+                    final isSelected = (ref.read(playerStateProvider).isPlaying ||
+                            ref.read(playerStateProvider).isPaused) &&
+                        ref.read(audioProvider).getAudio() == audio;
 
                     return GestureDetector(
                       onTap: () {
-                        final audio =
-                            ref.read(audioProvider).getAudioFilePaths()[index];
+                        final audio = ref.read(audioProvider).getAudioFilePaths()[index];
                         final currentAudio = ref.read(audioProvider).getAudio();
 
                         if (currentAudio == audio) {
-                          ref
-                              .read(playerStateProvider.notifier)
-                              .restartSong(audio);
+                          ref.read(playerStateProvider.notifier).restartSong(audio);
                         } else {
                           ref.read(audioProvider.notifier).setAudio(audio);
                           ref.read(playerStateProvider.notifier).onLoad(audio);
                           ref.read(playerStateProvider.notifier).onPlay();
                         }
                       },
-                      child: SizedBox(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.015,
+                          bottom: MediaQuery.of(context).size.height * 0.015,
+                        ),
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Image.asset(
-                              music.imagePath,
-                              width: MediaQuery.of(context).size.width * 0.13,
-                              height:
-                                  MediaQuery.of(context).size.height * 0.055,
-                              fit: BoxFit.cover,
-                            ),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.02,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      if (isSelected)
-                                        Image.asset(
-                                          'assets/images/audiowave-4.gif',
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.04,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.03,
-                                        ),
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.005,
+                              width: MediaQuery.of(context).size.width * 0.15,
+                              height: MediaQuery.of(context).size.height * 0.07,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(3),
+                                child: Image.network(
+                                  music.imagePath,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return const Icon(
+                                      Icons.error,
+                                      color: Colors.red,
+                                    );
+                                  },
+                                  loadingBuilder: (context, child, progress) {
+                                    if (progress == null) return child;
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        value: progress.expectedTotalBytes != null
+                                            ? progress.cumulativeBytesLoaded /
+                                                progress.expectedTotalBytes!
+                                            : null,
                                       ),
-                                      Text(
-                                        music.title,
-                                        style: TextStyle(
-                                          fontFamily: 'AvenirNext',
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                          color: isSelected ? lgreen : lwhite,
-                                        ),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    music.artistName,
-                                    style: const TextStyle(
-                                      fontFamily: 'AvenirNext',
-                                      fontSize: 14,
-                                      color: lwhite,
-                                    ),
-                                    textAlign: TextAlign.left,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: SvgPicture.asset(
-                                'assets/images/More.svg',
-                                width:
-                                    MediaQuery.of(context).size.width * 0.005,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.005,
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                             SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.06,
+                              width: MediaQuery.of(context).size.width * 0.04,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  music.title,
+                                  style: TextStyle(
+                                    fontFamily: 'AvenirNext',
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: isSelected
+                                        ? const Color.fromARGB(255, 62, 255, 168)
+                                        : lwhite,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                                Text(
+                                  music.artistName,
+                                  style: TextStyle(
+                                    fontFamily: 'AvenirNext',
+                                    fontSize: 12,
+                                    color: isSelected
+                                        ? const Color.fromARGB(255, 62, 255, 168)
+                                        : const Color.fromARGB(255, 154, 154, 154),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -280,11 +247,12 @@ class AlbumView extends ConsumerWidget {
           ),
         ),
       ),
-      bottomNavigationBar: const SizedBox(
-        height: 100,
-        // color: Theme.of(context).colorScheme.onPrimary,
-        child: AudioPlayerUI(),
-      ),
-    );
+    
+    
+        bottomNavigationBar: const SizedBox(
+          height: 100,
+          child: AudioPlayerUI(),
+        ),
+      );
+    }
   }
-}

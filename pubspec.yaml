@@ -41,6 +41,9 @@ dependencies:
   cloud_firestore: ^4.15.10
   provider: ^6.1.2
   firebase_auth: ^4.19.0
+  firebase_storage: ^11.7.6
+  just_audio: ^0.9.38
+  
 
 dev_dependencies:
   flutter_test:

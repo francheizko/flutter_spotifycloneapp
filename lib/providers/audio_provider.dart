@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spotifycloneapp/models/music_model.dart';
@@ -5,31 +6,13 @@ import 'package:flutter_spotifycloneapp/models/music_model.dart';
 final audioProvider = ChangeNotifierProvider((ref) => AudioNotifier());
 
 class AudioNotifier extends ChangeNotifier {
-  final List<String> audioFilePaths = [
-    'Musics/hev-abi-walang-alam.mp3',
-    'Musics/oh-caraga-ayawnag-hilak.mp3',
-    'Musics/olivia-rodrigo-traitor.mp3'
-  ];
-
-  List<Music> musicList = [
-    Music(
-        title: 'Walang Alam',
-        imagePath: 'assets/images/hev-abi.jpeg',
-        artistName: 'Hev Abi'),
-    Music(
-        title: 'Ayaw Nag Hilak',
-        imagePath: 'assets/images/oh-caraga.jpeg',
-        artistName: 'Oh Caraga!'),
-    Music(
-        title: 'Traitor',
-        imagePath: 'assets/images/olivia-rodrigo.jpeg',
-        artistName: 'Olivia Rodrigo'),
-  ];
+  List<String> audioFilePaths = [];
+  List<Music> musicList = [];
   String audio = '';
   int _index = 0;
 
   AudioNotifier() {
-    audio = audioFilePaths[_index];
+    fetchSongs();
   }
 
   int get index => _index;
@@ -83,4 +66,37 @@ class AudioNotifier extends ChangeNotifier {
     audio = '';
     notifyListeners();
   }
+
+ Future<void> fetchSongs() async {
+    try {
+      final snapshot = await FirebaseFirestore.instance.collection('songs').get();
+      print('Firestore snapshot obtained.');
+      audioFilePaths = snapshot.docs
+          .where((doc) => doc.data().containsKey('url'))
+          .map((doc) => doc['url'] as String)
+          .toList();
+      print('Audio file paths fetched: $audioFilePaths');
+
+      musicList = snapshot.docs
+          .where((doc) =>
+              doc.data().containsKey('title') &&
+              doc.data().containsKey('imagePath') &&
+              doc.data().containsKey('artist'))
+          .map((doc) => Music(
+                title: doc['title'] as String,
+                imagePath: doc['imagePath'] as String,
+                artistName: doc['artist'] as String,
+              ))
+          .toList();
+      print('Music list fetched: ${musicList.length} items.');
+
+      if (audioFilePaths.isNotEmpty) {
+        audio = audioFilePaths[0];
+      }
+      notifyListeners();
+    } catch (e) {
+      print('Error fetching songs: $e');
+    }
+  }
+
 }

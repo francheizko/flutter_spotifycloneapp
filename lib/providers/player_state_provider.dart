@@ -4,8 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final playerStateProvider =
-    ChangeNotifierProvider((ref) => PlayerStateNotifier());
+final playerStateProvider = ChangeNotifierProvider((ref) => PlayerStateNotifier());
 
 class PlayerStateNotifier extends ChangeNotifier {
   double seekbarValue = 0, volumeValue = 0.5, totalDuration = 0;
@@ -13,7 +12,7 @@ class PlayerStateNotifier extends ChangeNotifier {
   AudioPlayer player = AudioPlayer();
 
   void onLoad(String songPath) {
-    Future.microtask(() => player.setSourceAsset(songPath).then((value) {
+    Future.microtask(() => player.setSourceUrl(songPath).then((value) {
           onProgress();
           isPlaying = false; // Reset the playback state
           notifyListeners();
@@ -28,7 +27,6 @@ class PlayerStateNotifier extends ChangeNotifier {
       player.onDurationChanged.listen((event) {
         totalDuration = event.inMilliseconds.toDouble();
         onVolumeChange(volumeValue);
-        // print(totalDuration);
         notifyListeners();
       });
       player.onPositionChanged.listen((event) {
@@ -73,8 +71,7 @@ class PlayerStateNotifier extends ChangeNotifier {
 
   onPlay() {
     if (!isPlaying) {
-      player
-          .resume(); // This will either start or resume the player based on its current state
+      player.resume();
     } else {
       player.pause();
       isPaused = !isPaused;
@@ -96,7 +93,7 @@ class PlayerStateNotifier extends ChangeNotifier {
 
   void restartSong(String songPath) {
     player.stop().then((_) {
-      player.setSourceAsset(songPath).then((value) {
+      player.setSourceUrl(songPath).then((value) {
         onProgress();
         player.resume();
       });
