@@ -15,9 +15,9 @@ class PlayerStateNotifier extends ChangeNotifier {
   void onLoad(String songPath) {
     Future.microtask(() => player.setSourceAsset(songPath).then((value) {
           onProgress();
-          isPlaying = false; // Reset the playback state
+          isPlaying = false;
           notifyListeners();
-          onPlay(); // Automatically start playing after loading
+          onPlay();
         }).catchError((e) {
           log('Error in onLoad: $e');
         }));
@@ -28,7 +28,7 @@ class PlayerStateNotifier extends ChangeNotifier {
       player.onDurationChanged.listen((event) {
         totalDuration = event.inMilliseconds.toDouble();
         onVolumeChange(volumeValue);
-        // print(totalDuration);
+
         notifyListeners();
       });
       player.onPositionChanged.listen((event) {
@@ -73,8 +73,7 @@ class PlayerStateNotifier extends ChangeNotifier {
 
   onPlay() {
     if (!isPlaying) {
-      player
-          .resume(); // This will either start or resume the player based on its current state
+      player.resume();
     } else {
       player.pause();
       isPaused = !isPaused;

@@ -33,12 +33,11 @@ class _PlaylistScreenState extends ConsumerState<PlaylistScreen> {
   @override
   void initState() {
     super.initState();
-    // Initialize futures to fetch data once when the widget is created
+
     _playlistMusic = _fetchPlaylistMusic();
     _userName = _fetchUserName();
   }
 
-  // Fetch playlist music from shared preferences
   Future<List<Music>> _fetchPlaylistMusic() async {
     final prefs = await SharedPreferences.getInstance();
     List<String> musicIds = prefs.getStringList(widget.playlistId) ?? [];

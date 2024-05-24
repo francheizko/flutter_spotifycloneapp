@@ -21,7 +21,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void onItemTapped(int index) {
     if (index == 2) {
-      // Navigate to LibraryScreen
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const LibraryScreen()),

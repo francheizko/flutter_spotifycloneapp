@@ -23,13 +23,13 @@ class _SignUp5State extends State<SignUp5> {
   bool spotifyTermsSelected = false;
   bool newsAndOffersSelected = false;
   bool registrationDataSelected = false;
-  bool _isLoading = false; // Added to track loading state
+  bool _isLoading = false;
 
   TextEditingController _nameController = TextEditingController();
 
   void sendFinalDataToFirebase() async {
     setState(() {
-      _isLoading = true; // Start loading
+      _isLoading = true;
     });
 
     SignUpData signUpData = Provider.of<SignUpData>(context, listen: false);
@@ -55,9 +55,9 @@ class _SignUp5State extends State<SignUp5> {
         ),
       );
       setState(() {
-        _isLoading = false; // Stop loading
+        _isLoading = false;
       });
-      return; // Exit the function early as there's no point proceeding further
+      return;
     }
 
     try {
@@ -107,7 +107,7 @@ class _SignUp5State extends State<SignUp5> {
       print('Error sending data to Firestore: $e');
     } finally {
       setState(() {
-        _isLoading = false; // Stop loading
+        _isLoading = false;
       });
     }
   }

@@ -17,8 +17,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  bool _isButtonEnabled = false; // Track if the login button should be enabled
-  String? _errorMessage; // Store error message
+  bool _isButtonEnabled = false;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       setState(() {
         _errorMessage = 'Incorrect email or password, please try again';
-        _isButtonEnabled = false; // Disable the button
+        _isButtonEnabled = false;
       });
       print('Login error: $e');
     }

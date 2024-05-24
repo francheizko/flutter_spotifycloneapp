@@ -126,18 +126,14 @@ class TrackView extends StatelessWidget {
                       Row(
                         children: [
                           IconButton(
-                            onPressed: () {
-                              // Handle play/pause functionality
-                            },
+                            onPressed: () {},
                             icon: const Icon(
                               Icons.play_arrow,
                               color: Colors.white,
                             ),
                           ),
                           IconButton(
-                            onPressed: () {
-                              // Handle stop functionality
-                            },
+                            onPressed: () {},
                             icon: const Icon(
                               Icons.stop,
                               color: Colors.white,

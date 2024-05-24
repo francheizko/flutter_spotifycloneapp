@@ -13,7 +13,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AlbumView extends ConsumerWidget {
   const AlbumView({super.key});
 
-  // Fetch playlists for the current user
   Future<List<Map<String, dynamic>>> _getPlaylistsFromFirestore() async {
     try {
       User? user = FirebaseAuth.instance.currentUser;
@@ -29,22 +28,20 @@ class AlbumView extends ConsumerWidget {
 
       return querySnapshot.docs
           .map((doc) => {'id': doc.id, ...doc.data()})
-          .toList(); // Include document ID with playlist data
+          .toList();
     } catch (e) {
       print('Error fetching playlists: $e');
       return [];
     }
   }
 
-  // Add music to selected playlists using SharedPreferences
   Future<void> _addMusicToPlaylists(
       Music music, List<String> selectedPlaylists) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       for (String playlistId in selectedPlaylists) {
         List<String> playlist = prefs.getStringList(playlistId) ?? [];
-        playlist
-            .add(music.id); // assuming `id` is a unique identifier for Music
+        playlist.add(music.id);
         await prefs.setStringList(playlistId, playlist);
       }
     } catch (e) {
@@ -166,7 +163,6 @@ class AlbumView extends ConsumerWidget {
                     alignment: Alignment.bottomCenter,
                     child: GestureDetector(
                       onTap: () async {
-                        // Add music to selected playlists when "Done" is pressed
                         await _addMusicToPlaylists(music, selectedPlaylists);
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context)
@@ -249,7 +245,6 @@ class AlbumView extends ConsumerWidget {
                   leading: const Icon(Icons.share, color: lwhite),
                   title: const Text('Share', style: TextStyle(color: lwhite)),
                   onTap: () {
-                    // Implement share functionality
                     Navigator.pop(context);
                   },
                 ),

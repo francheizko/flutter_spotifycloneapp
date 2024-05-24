@@ -9,7 +9,7 @@ class SignUpData extends ChangeNotifier {
   bool agreeToTerms = false;
   bool receiveNewsAndOffers = false;
   bool shareRegistrationData = false;
-  bool _isBelowThirteen = false; // Add this line
+  bool _isBelowThirteen = false;
 
   bool get isBelowThirteen => _isBelowThirteen;
   set isBelowThirteen(bool value) {
@@ -33,11 +33,10 @@ class SignUpData extends ChangeNotifier {
     agreeToTerms = false;
     receiveNewsAndOffers = false;
     shareRegistrationData = false;
-    _isBelowThirteen = false; // Reset this as well
+    _isBelowThirteen = false;
     notifyListeners();
   }
 
-  // Convert SignUpData to JSON format
   Map<String, dynamic> toJson() {
     return {
       'email': email,
@@ -48,7 +47,7 @@ class SignUpData extends ChangeNotifier {
       'agreeToTerms': agreeToTerms,
       'receiveNewsAndOffers': receiveNewsAndOffers,
       'shareRegistrationData': shareRegistrationData,
-      'isBelowThirteen': _isBelowThirteen // Include this in your JSON if needed
+      'isBelowThirteen': _isBelowThirteen
     };
   }
 }
