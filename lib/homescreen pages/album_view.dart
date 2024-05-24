@@ -1,19 +1,264 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_spotifycloneapp/constants/constants.dart';
+import 'package:flutter_spotifycloneapp/models/music_model.dart';
 import 'package:flutter_spotifycloneapp/providers/audio_player.dart';
 import 'package:flutter_spotifycloneapp/providers/audio_provider.dart';
 import 'package:flutter_spotifycloneapp/providers/player_state_provider.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AlbumView extends ConsumerWidget {
   const AlbumView({super.key});
 
+  // Fetch playlists for the current user
+  Future<List<Map<String, dynamic>>> _getPlaylistsFromFirestore() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        return [];
+      }
+
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('playlists')
+              .where('user_id', isEqualTo: user.uid)
+              .get();
+
+      return querySnapshot.docs
+          .map((doc) => {'id': doc.id, ...doc.data()})
+          .toList(); // Include document ID with playlist data
+    } catch (e) {
+      print('Error fetching playlists: $e');
+      return [];
+    }
+  }
+
+  // Add music to selected playlists using SharedPreferences
+  Future<void> _addMusicToPlaylists(
+      Music music, List<String> selectedPlaylists) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      for (String playlistId in selectedPlaylists) {
+        List<String> playlist = prefs.getStringList(playlistId) ?? [];
+        playlist
+            .add(music.id); // assuming `id` is a unique identifier for Music
+        await prefs.setStringList(playlistId, playlist);
+      }
+    } catch (e) {
+      print('Error adding music to playlists: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playerState = ref.watch(playerStateProvider);
+
+    void _showMoreOptions(BuildContext context, Music music) async {
+      final playlists = await _getPlaylistsFromFirestore();
+
+      void _showPlaylistsModal(
+          BuildContext context, List<Map<String, dynamic>> playlists) {
+        List<String> selectedPlaylists = [];
+
+        showModalBottomSheet(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(20),
+            ),
+          ),
+          context: context,
+          builder: (BuildContext context) {
+            return Container(
+              color: backgroundc,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView(
+                      children: playlists.map((playlist) {
+                        bool isSelected = false;
+
+                        return StatefulBuilder(
+                          builder:
+                              (BuildContext context, StateSetter setState) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical:
+                                    MediaQuery.of(context).size.height * 0.008,
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: ListTile(
+                                      leading: Image.asset(
+                                        playlist['image'],
+                                        fit: BoxFit.cover,
+                                        width: 67,
+                                        height: 67,
+                                      ),
+                                      title: Text(playlist['name'],
+                                          style:
+                                              const TextStyle(color: lwhite)),
+                                      onTap: () {
+                                        setState(() {
+                                          isSelected = !isSelected;
+                                          if (isSelected) {
+                                            selectedPlaylists
+                                                .add(playlist['id']);
+                                          } else {
+                                            selectedPlaylists
+                                                .remove(playlist['id']);
+                                          }
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        isSelected = !isSelected;
+                                        if (isSelected) {
+                                          selectedPlaylists.add(playlist['id']);
+                                        } else {
+                                          selectedPlaylists
+                                              .remove(playlist['id']);
+                                        }
+                                      });
+                                    },
+                                    child: Container(
+                                      child: isSelected
+                                          ? Image.asset(
+                                              'assets/images/checked_icon.png',
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.07,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.07,
+                                            )
+                                          : Image.asset(
+                                              'assets/images/circled-thin-24.png',
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.07,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.07,
+                                              fit: BoxFit.contain,
+                                            ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: GestureDetector(
+                      onTap: () async {
+                        // Add music to selected playlists when "Done" is pressed
+                        await _addMusicToPlaylists(music, selectedPlaylists);
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          backgroundColor: backgroundc,
+                          content: Text(
+                            'Music added from playlist successfully!',
+                          ),
+                        ));
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.35,
+                        height: MediaQuery.of(context).size.height * 0.05,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(21),
+                          color: lgreen,
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Done',
+                            style: TextStyle(
+                              fontFamily: 'AvenirNext',
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.08,
+                  )
+                ],
+              ),
+            );
+          },
+        );
+      }
+
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            color: backgroundc,
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                  leading: const Icon(Icons.playlist_add, color: lwhite),
+                  title: const Text('Add to Playlist',
+                      style: TextStyle(color: lwhite)),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _showPlaylistsModal(context, playlists);
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      backgroundColor: backgroundc,
+                      content: Text(
+                        'Music added to playlist successfully!',
+                      ),
+                    ));
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.favorite, color: lwhite),
+                  title: const Text('Like', style: TextStyle(color: lwhite)),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.queue, color: lwhite),
+                  title: const Text('Add to Queue',
+                      style: TextStyle(color: lwhite)),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.share, color: lwhite),
+                  title: const Text('Share', style: TextStyle(color: lwhite)),
+                  onTap: () {
+                    // Implement share functionality
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
 
     return Scaffold(
       backgroundColor: backgroundc,
@@ -126,10 +371,14 @@ class AlbumView extends ConsumerWidget {
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.07,
                           ),
-                          SvgPicture.asset(
-                            'assets/images/More.svg',
-                            width: MediaQuery.of(context).size.width * 0.005,
-                            height: MediaQuery.of(context).size.height * 0.005,
+                          GestureDetector(
+                            onTap: () {},
+                            child: SvgPicture.asset(
+                              'assets/images/More.svg',
+                              width: MediaQuery.of(context).size.width * 0.005,
+                              height:
+                                  MediaQuery.of(context).size.height * 0.005,
+                            ),
                           ),
                         ],
                       ),
@@ -258,16 +507,22 @@ class AlbumView extends ConsumerWidget {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(right: 10),
-                              child: SvgPicture.asset(
-                                'assets/images/More.svg',
-                                width:
-                                    MediaQuery.of(context).size.width * 0.005,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.005,
+                              child: GestureDetector(
+                                onTap: () {
+                                  _showMoreOptions(context, music);
+                                },
+                                child: SvgPicture.asset(
+                                  'assets/images/More.svg',
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.005,
+                                  height: MediaQuery.of(context).size.height *
+                                      0.005,
+                                ),
                               ),
                             ),
                             SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.06,
+                              height:
+                                  MediaQuery.of(context).size.height * 0.065,
                             ),
                           ],
                         ),
@@ -282,7 +537,6 @@ class AlbumView extends ConsumerWidget {
       ),
       bottomNavigationBar: const SizedBox(
         height: 100,
-        // color: Theme.of(context).colorScheme.onPrimary,
         child: AudioPlayerUI(),
       ),
     );

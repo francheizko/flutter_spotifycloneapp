@@ -21,26 +21,32 @@ class _BottomNavBarState extends State<BottomNavBar> {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
-      backgroundColor: ldarkgray,
+      backgroundColor: backgroundc,
       showSelectedLabels: true,
-      showUnselectedLabels: false,
+      showUnselectedLabels: true,
+      selectedItemColor: lwhite,
+      unselectedItemColor: Colors.grey,
+      selectedLabelStyle: const TextStyle(
+        fontFamily: 'AvenirNext',
+        fontSize: 13,
+      ),
+      unselectedLabelStyle: const TextStyle(
+        fontWeight: FontWeight.normal,
+        fontSize: 12,
+      ),
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Container(
             alignment: Alignment.center,
-            child: Column(
-              children: [
-                widget.selectedindex == 0
-                    ? SvgPicture.asset(
-                        'assets/images/home-selected.svg',
-                        width: 25,
-                      )
-                    : SvgPicture.asset(
-                        'assets/images/home-unseleced.svg',
-                        width: 25,
-                      ),
-              ],
-            ),
+            child: widget.selectedindex == 0
+                ? Image.asset(
+                    'assets/images/home-selected.png',
+                    width: 25,
+                  )
+                : Image.asset(
+                    'assets/images/home-unselected.png',
+                    width: 25,
+                  ),
           ),
           label: 'Home',
         ),
@@ -48,12 +54,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
           icon: Container(
             alignment: Alignment.center,
             child: widget.selectedindex == 1
-                ? SvgPicture.asset(
-                    'assets/images/search-selected.svg',
+                ? Image.asset(
+                    'assets/images/search-selected.png',
                     width: 25,
                   )
-                : SvgPicture.asset(
-                    'assets/images/search-unselected.svg',
+                : Image.asset(
+                    'assets/images/search-unselected.png',
                     width: 25,
                   ),
           ),
@@ -63,12 +69,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
           icon: Container(
             alignment: Alignment.center,
             child: widget.selectedindex == 2
-                ? SvgPicture.asset(
-                    'assets/images/library-selected.svg',
+                ? Image.asset(
+                    'assets/images/library-selected.png',
                     width: 25,
                   )
-                : SvgPicture.asset(
-                    'assets/images/library-unselected.svg',
+                : Image.asset(
+                    'assets/images/library-unselected.png',
                     width: 25,
                   ),
           ),

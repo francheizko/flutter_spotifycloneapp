@@ -14,6 +14,7 @@ import 'package:flutter_spotifycloneapp/Create%20Account%20&%20Onboarding/signup
 import 'package:flutter_spotifycloneapp/homescreen%20pages/album_view.dart';
 import 'package:flutter_spotifycloneapp/homescreen%20pages/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_spotifycloneapp/homescreen%20pages/library_screen.dart';
 import 'firebase_options.dart';
 
 //provider
@@ -50,8 +51,6 @@ class SpotifyCloneApp extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<SpotifyCloneApp> {
-  int selectedindex = 0;
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -68,6 +67,7 @@ class _MyWidgetState extends State<SpotifyCloneApp> {
         '/signup5': (context) => const SignUp5(),
         '/login_screen': (context) => const LoginScreen(),
         '/home_screen': (context) => const HomeScreen(),
+        '/library_screen': (context) => const LibraryScreen(),
       },
     );
   }

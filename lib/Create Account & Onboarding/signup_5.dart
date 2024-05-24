@@ -182,10 +182,8 @@ class _SignUp5State extends State<SignUp5> {
                     borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide.none,
                   ),
-                  contentPadding: const EdgeInsets.symmetric(
-                      vertical: 15,
-                      horizontal:
-                          10), // Adjust vertical padding to change height
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
                 ),
                 style: const TextStyle(
                   fontFamily: 'AvenirNext',

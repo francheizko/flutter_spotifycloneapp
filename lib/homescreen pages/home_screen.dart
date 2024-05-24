@@ -4,6 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_spotifycloneapp/constants/constants.dart';
 import 'package:flutter_spotifycloneapp/homescreen%20pages/album_view.dart';
 import 'package:flutter_spotifycloneapp/homescreen%20pages/bottom_navbar.dart';
+import 'package:flutter_spotifycloneapp/homescreen%20pages/library_screen.dart';
+import 'package:flutter_spotifycloneapp/homescreen%20pages/playlist_screen.dart';
 import 'package:flutter_spotifycloneapp/models/artist_model.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -15,9 +17,27 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int selectedIndex = 0;
+
+  void onItemTapped(int index) {
+    if (index == 2) {
+      // Navigate to LibraryScreen
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const LibraryScreen()),
+      );
+    } else {
+      setState(() {
+        selectedIndex = index;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BottomNavBar(
+          selectedindex: selectedIndex, onItemTapped: onItemTapped),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: backgroundc,

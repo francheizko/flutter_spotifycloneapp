@@ -18,6 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   bool _isButtonEnabled = false; // Track if the login button should be enabled
+  String? _errorMessage; // Store error message
 
   @override
   void initState() {
@@ -48,6 +49,10 @@ class _LoginScreenState extends State<LoginScreen> {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       Navigator.pushReplacementNamed(context, '/home_screen');
     } catch (e) {
+      setState(() {
+        _errorMessage = 'Incorrect email or password, please try again';
+        _isButtonEnabled = false; // Disable the button
+      });
       print('Login error: $e');
     }
   }
@@ -112,6 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
               width: MediaQuery.of(context).size.width * 0.82,
               height: MediaQuery.of(context).size.height * 0.055,
               child: TextFormField(
+                cursorColor: lgreen,
                 controller: _emailController,
                 decoration: InputDecoration(
                   filled: true,
@@ -142,6 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Stack(
                 children: [
                   TextFormField(
+                    cursorColor: lgreen,
                     controller: _passwordController,
                     obscureText: _obscureText,
                     decoration: InputDecoration(
@@ -174,6 +181,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             ),
+            if (_errorMessage != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  _errorMessage!,
+                  style: const TextStyle(
+                    color: Colors.red,
+                    fontFamily: 'AvenirNext',
+                    fontSize: 12,
+                  ),
+                ),
+              ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.05,
             ),

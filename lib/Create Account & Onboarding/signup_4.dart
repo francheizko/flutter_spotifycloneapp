@@ -149,13 +149,12 @@ class _SignUp4State extends State<SignUp4> {
                     borderRadius: BorderRadius.circular(21),
                     color: signUpData.isBelowThirteen
                         ? lldarkergray
-                        : Colors.white, // Change color based on condition
+                        : Colors.white,
                   ),
                   child: InkWell(
                     onTap: signUpData.isBelowThirteen
                         ? null
                         : () {
-                            // Disable tap if the condition is not met
                             print('Stored date of birth: ${signUpData.dob}');
                             Navigator.pushReplacementNamed(context, '/signup3');
                           },
@@ -168,8 +167,7 @@ class _SignUp4State extends State<SignUp4> {
                           fontWeight: FontWeight.w600,
                           color: signUpData.isBelowThirteen
                               ? Colors.grey
-                              : Colors
-                                  .black, // Change text color based on condition
+                              : Colors.black,
                         ),
                       ),
                     ),

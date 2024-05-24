@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spotifycloneapp/constants/constants.dart';
 import 'package:flutter_spotifycloneapp/providers/audio_provider.dart';
 import 'package:flutter_spotifycloneapp/providers/player_state_provider.dart';
 
@@ -27,6 +28,7 @@ class AudioPlayerUI extends ConsumerWidget {
             IconButton(
               onPressed: () => ref.read(playerStateProvider.notifier).onPlay(),
               icon: Icon(
+                color: lgreen,
                 isPlaying ? Icons.pause : Icons.play_arrow_outlined,
                 size: 50,
               ),
@@ -40,6 +42,7 @@ class AudioPlayerUI extends ConsumerWidget {
             ),
             Expanded(
               child: Slider(
+                activeColor: lgreen,
                 min: 0,
                 max: 1,
                 value: seekbarValue,
@@ -57,6 +60,7 @@ class AudioPlayerUI extends ConsumerWidget {
             SizedBox(
               width: 100,
               child: Slider(
+                activeColor: lgreen,
                 min: 0,
                 max: 1,
                 value: volumeValue,
